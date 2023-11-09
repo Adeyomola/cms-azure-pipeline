@@ -19,7 +19,6 @@ jobs:
           terraform init
           terraform apply -auto-approve
         workingDirectory: backend
-  - job: Install Let'sEncrypt SSL Certificate
   - job: Static Application Security Testing - SonarQube
     steps:
       - script: |
