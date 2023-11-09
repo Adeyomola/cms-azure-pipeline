@@ -1,0 +1,53 @@
+additionalPrometheusRulesMap:
+  rule-name:
+    groups:
+    - name: All Instances
+      rules:
+      - alert: InstanceDown
+        expr: up == 0
+        for: 15s
+        annotations:
+        labels:
+          severity: 'critical'
+config:
+    route:
+      group_by: ['namespace']
+      receiver: 'Monitoring Team'
+      routes:
+        - receiver: 'slack'
+        - receiver: 'mail'
+    receivers:
+    - name: 'slack'
+      slack_configs:
+        - channel: '#channel-name'
+          api_url: {{ slack_api }}
+          send_resolved: true
+          icon_url: https://avatars3.githubusercontent.com/u/3380462
+
+    receivers:
+    - name: 'mail'
+      email_configs:
+      - to: {{ email }} 
+        from: {{ email }}
+        smarthost: {{ mail_server }}
+        auth_username: {{ email }}
+        auth_identity: {{ email }}
+        auth_password: {{ email_password }}
+        send_resolved: true
+#scrape config
+additionalScrapeConfigs:
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+        - localhost:9090
+  - job_name: 'node_exporter'
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+        - localhost:9100
+  - job_name: 'prom_middleware'
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+        - localhost:9091

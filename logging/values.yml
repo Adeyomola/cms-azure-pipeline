@@ -1,0 +1,8 @@
+---
+replicas: 1
+minimumMasterNodes: 1
+persistence:
+  enabled: false
+readinessProbe:
+  initialDelaySeconds: 120
+clusterHealthCheckParams: "wait_for_status=yellow&timeout=50s"

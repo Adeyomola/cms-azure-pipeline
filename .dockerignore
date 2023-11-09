@@ -1,0 +1,6 @@
+# persistent log directories
+/data
+/logs
+
+#environment variable for docker composer
+.env

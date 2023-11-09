@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: cms
+  name: app-deployment
+  labels:
+    app: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+#      volumes:
+#      - name: wordpress-persistent-storage
+#        persistentVolumeClaim:
+#          claimName: wp-pv-claim
+      containers:
+      - name: app
+        image: adeyomola/wordpress
+        ports:
+        - containerPort: 80
+#        volumeMounts:
+#        - name: wordpress-persistent-storage
+#          mountPath: /var/www/html
+        env:
+        - name: DB_USER
+          value: adeyomola
+#          valueFrom:
+#            secretKeyRef:
+#              name: db-secret
+#              key: db-user
+        - name: DB_PASSWORD
+          value: userpassword
+#          valueFrom:
+#            secretKeyRef:
+#              name: db-secret
+#              key: db-password
+        - name: DB_HOST
+          value: db-service.cms.svc.cluster.local
+        - name: DB_NAME
+          value: "${db_name}"
