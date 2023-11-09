@@ -15,10 +15,10 @@ variables:
 jobs:
   - job: Create Backend
     steps:
-      - workingDirectory: backend
-        script: |
+      - script: |
           terraform init
           terraform apply -auto-approve
+        workingDirectory: backend
   - job: Install Let'sEncrypt SSL Certificate
   - job: Static Application Security Testing - SonarQube
     steps:
