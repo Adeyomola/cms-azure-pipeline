@@ -13,23 +13,23 @@ variables:
   dockerhubPassword: $(docker_password)
   dockerhubUser: $(docker_username)
 jobs:
-  - job: Create Backend
+  - job: Create_Backend
     steps:
       - script: |
           terraform init
           terraform apply -auto-approve
         workingDirectory: backend
-  - job: Static Application Security Testing - SonarQube
+  - job: Static_Application_Security_Testing-SonarQube
     steps:
       - script: |
           def scannerHome = tool 'sonarscanner'
           sh "${scannerHome}/bin/sonar-scanner"
         workingDirectory: docker
-  - job: Docker Image Build
+  - job: Docker_Image_Build
     steps:
       - script: docker build . -t wp
         workingDirectory: docker
-  - job: Docker Image Push
+  - job: Docker_Image_Push
     steps:
       - script: |
           echo $(dockerhubPassword) | docker login -u $(dockerhubUser) --password-stdin
@@ -37,49 +37,49 @@ jobs:
           docker push adeyomola/wordpress
           docker logout
         workingDirectory: docker
-  - job: Create AKS Cluster
+  - job: Create_AKS_Cluster
     steps:
       - script: |
           terraform init
           terraform apply -auto-approve
         workingDirectory: provision
-  - job: Install Let'sEncrypt SSL Certificate
+  - job: Install_LetsEncrypt_SSL_Certificate
     steps:
       - script: |
           terraform init
           terraform apply -auto-approve
         workingDirectory: ssl
-  - job: Convert Template Files
+  - job: Convert_Template_Files
     steps:
       - script: |
           terraform init
           terraform apply -auto-approve
         workingDirectory: ansible
-  - job: Deploy Ingress Controller
+  - job: Deploy_Ingress_Controller
     steps:
       - script: |
           terraform init
           terraform apply -auto-approve
         workingDirectory: lb
-  - job: Deploy Prometheus and Grafana for Monitoring
+  - job: Deploy_Prometheus_and_Grafana_for_Monitoring
     steps:
       - script: |
           terraform init
           terraform apply -auto-approve
         workingDirectory: monitoring
-  - job: Deploy ELK Stack for Logging
+  - job: Deploy_ELK_Stack_for_Logging
     steps:
       - script: |
           terraform init
           terraform apply -auto-approve
         workingDirectory: logging
-  - job: Scanning Image
+  - job: Scanning_Image
     steps:
       - script: |
           trivy image adeyomola/wordpress
 
   #         trivy --exit-code 1 --no-progress --severity CRITICAL adeyomola/wordpress
-  - job: Deploy App
+  - job: Deploy_App
     steps:
       - script: |
           terraform init
