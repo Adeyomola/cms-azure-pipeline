@@ -19,7 +19,7 @@ jobs:
           terraform init
           terraform apply -auto-approve
         workingDirectory: backend
-  - job: Static_Application_Security_Testing-SonarQube
+  - job: Static_Application_Security_Testing_SonarQube
     steps:
       - script: |
           def scannerHome = tool 'sonarscanner'
