@@ -36,7 +36,7 @@ jobs:
       - script: |
           terraform init
           terraform destroy -auto-approve
-        workingDirectory: lb
+        workingDirectory: alb
         displayName: Destroy Ingress Controller
 
       - script: |
