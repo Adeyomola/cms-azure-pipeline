@@ -25,13 +25,6 @@ jobs:
   #         def scannerHome = tool 'sonarscanner'
   #         sh "${scannerHome}/bin/sonar-scanner"
   #       workingDirectory: docker
-  # - job: Install_AWS_CLI
-  #   steps:
-  #     - script: |
-  #         curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-  #         unzip awscliv2.zip
-  #         sudo ./aws/install
-  #       workingDirectory: docker
   - job: Deploy_CMS
     steps:
       - script: |
@@ -41,7 +34,7 @@ jobs:
         workingDirectory: docker
         displayName: Docker Build
       - script: |
-          echo $(dockerhubPassword) | docker login -u $(dockerhubUser) --password-stdin
+          echo $(docker_password) | docker login -u $(docker_username) --password-stdin
           docker tag wp adeyomola/wordpress
           docker push adeyomola/wordpress
           docker logout
@@ -62,31 +55,31 @@ jobs:
         displayName: "Download Ansible Vault Password File"
         inputs:
           secureFile: ".pass.txt"
-      - script: |
+      - bash: |
           terraform init -reconfigure
           terraform apply -auto-approve
         workingDirectory: ansible
         displayName: Convert Template Files
-      - script: |
+      - bash: |
           terraform init -reconfigure
           terraform apply -auto-approve
         workingDirectory: lb
         displayName: Deploy Ingress Controller
-      - script: |
+      - bash: |
           terraform init -reconfigure
           terraform apply -auto-approve
         workingDirectory: monitoring
         displayName: Deploy Prometheus and Grafana for Monitoring
-      - script: |
+      - bash: |
           terraform init -reconfigure
           terraform apply -auto-approve
         workingDirectory: logging
         displayName: Deploy Elastic Stack for Logging
-      - script: |
+      - bash: |
           trivy image adeyomola/wordpress
         #  trivy --exit-code 1 --no-progress --severity CRITICAL adeyomola/wordpress
         displayName: Scanning Image
-      - script: |
+      - bash: |
           terraform init -reconfigure
           terraform apply -auto-approve
         workingDirectory: deploy
