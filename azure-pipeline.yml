@@ -25,75 +25,66 @@ jobs:
   #         def scannerHome = tool 'sonarscanner'
   #         sh "${scannerHome}/bin/sonar-scanner"
   #       workingDirectory: docker
-  - job: Install_AWS_CLI
-    steps:
-      - script: |
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          sudo ./aws/install
-        workingDirectory: docker
-  - job: Docker_Image_Build
+  # - job: Install_AWS_CLI
+  #   steps:
+  #     - script: |
+  #         curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+  #         unzip awscliv2.zip
+  #         sudo ./aws/install
+  #       workingDirectory: docker
+  - job: Deploy_CMS
     steps:
       - script: docker build . -t wp
         workingDirectory: docker
-  - job: Docker_Image_Push
-    steps:
+        displayName: Docker Build
       - script: |
           echo $(dockerhubPassword) | docker login -u $(dockerhubUser) --password-stdin
           docker tag wp adeyomola/wordpress
           docker push adeyomola/wordpress
           docker logout
         workingDirectory: docker
-  - job: Create_AKS_Cluster
-    steps:
+        displayName: Docker Push
       - script: |
           terraform init
           terraform apply -auto-approve
         workingDirectory: provision
-  - job: Install_LetsEncrypt_SSL_Certificate
-    steps:
+        displayName: Create EKS Cluster
       - script: |
           terraform init
           terraform apply -auto-approve
         workingDirectory: ssl
+        displayName: Create SSL Certificate
       - task: DownloadSecureFile@1
         name: ansiblePass
         displayName: "Download Ansible Vault Password File"
         inputs:
           secureFile: ".pass.txt"
-  - job: Convert_Template_Files
-    steps:
       - script: |
           terraform init
           terraform apply -auto-approve
         workingDirectory: ansible
-  - job: Deploy_Ingress_Controller
-    steps:
+        displayName: Convert Template Files
       - script: |
           terraform init
           terraform apply -auto-approve
         workingDirectory: lb
-  - job: Deploy_Prometheus_and_Grafana_for_Monitoring
-    steps:
+        displayName: Deploy Ingress Controller
       - script: |
           terraform init
           terraform apply -auto-approve
         workingDirectory: monitoring
-  - job: Deploy_ELK_Stack_for_Logging
-    steps:
+        displayName: Deploy Prometheus and Grafana for Monitoring
       - script: |
           terraform init
           terraform apply -auto-approve
         workingDirectory: logging
-  - job: Scanning_Image
-    steps:
+        displayName: Deploy Elastic Stack for Logging
       - script: |
           trivy image adeyomola/wordpress
-
-  #         trivy --exit-code 1 --no-progress --severity CRITICAL adeyomola/wordpress
-  - job: Deploy_App
-    steps:
+        #  trivy --exit-code 1 --no-progress --severity CRITICAL adeyomola/wordpress
+        displayName: Scanning Image
       - script: |
           terraform init
           terraform apply -auto-approve
         workingDirectory: deploy
+        displayName: Deploy App
