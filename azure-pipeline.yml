@@ -28,13 +28,13 @@ jobs:
   - job: Deploy_CMS
     steps:
       - script: |
-          echo $(DOCKERHUBPASSWORD)
-          echo $(DOCKERHUBUSER)
+          echo ${{ variables.DOCKERHUBPASSWORD }}
+          echo ${{ variables.DOCKERHUBUSER }}
       - script: docker build . -t wp
         workingDirectory: docker
         displayName: Docker Build
       - script: |
-          echo $(DOCKERHUBPASSWORD) | docker login -$(DOCKERHUBUSER) --password-stdin
+          echo ${{ variables.DOCKERHUBPASSWORD }} | docker login ${{ variables.DOCKERHUBUSER }} --password-stdin
           docker tag wp adeyomola/wordpress
           docker push adeyomola/wordpress
           docker logout
