@@ -34,6 +34,9 @@ jobs:
   #       workingDirectory: docker
   - job: Deploy_CMS
     steps:
+      - script: |
+          echo hello
+          echo world
       - script: docker build . -t wp
         workingDirectory: docker
         displayName: Docker Build
