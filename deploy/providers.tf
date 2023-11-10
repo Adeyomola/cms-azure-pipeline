@@ -4,7 +4,7 @@ data "terraform_remote_state" "eks" {
   config = {
     key    = "provision/terraform.tfstate"
     bucket = "capstone-9-tfstate-bucket"
-    region = "eu-west-1"
+    region = "ca-central-1"
   }
 }
 
@@ -14,7 +14,7 @@ data "terraform_remote_state" "ssl" {
   config = {
     key    = "ssl/terraform.tfstate"
     bucket = "capstone-9-tfstate-bucket"
-    region = "eu-west-1"
+    region = "ca-central-1"
   }
 }
 
@@ -24,7 +24,7 @@ data "terraform_remote_state" "ssl" {
 #  config = {
 #    key    = "rds/terraform.tfstate"
 #    bucket = "capstone-9-tfstate-bucket"
-#    region = "eu-west-1"
+#    region = "ca-central-1"
 #  }
 #}
 
@@ -32,7 +32,7 @@ terraform {
   backend "s3" {
     bucket         = "capstone-9-tfstate-bucket"
     key            = "deploy/terraform.tfstate"
-    region         = "eu-west-1"
+    region         = "ca-central-1"
     dynamodb_table = "capstone_9_dynamodb"
   }
 
@@ -58,7 +58,7 @@ terraform {
 
 
 provider "aws" {
-  region = "eu-west-1"
+  region = "ca-central-1"
 }
 
 provider "kubernetes" {

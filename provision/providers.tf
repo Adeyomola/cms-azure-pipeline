@@ -2,7 +2,7 @@ terraform {
   backend "s3" {
     bucket         = "capstone-9-tfstate-bucket"
     key            = "provision/terraform.tfstate"
-    region         = "eu-west-1"
+    region         = "ca-central-1"
     dynamodb_table = "capstone_9_dynamodb"
   }
 

@@ -4,7 +4,7 @@ data "terraform_remote_state" "eks" {
   config = {
     key    = "provision/terraform.tfstate"
     bucket = "capstone-9-tfstate-bucket"
-    region = "eu-west-1"
+    region = "ca-central-1"
   }
 }
 
@@ -12,7 +12,7 @@ terraform {
   backend "s3" {
     bucket         = "capstone-9-tfstate-bucket"
     key            = "logging/terraform.tfstate"
-    region         = "eu-west-1"
+    region         = "ca-central-1"
     dynamodb_table = "capstone_9_dynamodb"
   }
 
@@ -28,7 +28,7 @@ terraform {
 
 
 provider "aws" {
-  region = "eu-west-1"
+  region = "ca-central-1"
 }
 
 provider "helm" {
