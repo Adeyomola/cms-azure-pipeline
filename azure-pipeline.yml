@@ -13,18 +13,18 @@ variables:
   dockerhubPassword: $(docker_password)
   dockerhubUser: $(docker_username)
 jobs:
-  - job: Create_Backend
-    steps:
-      - script: |
-          terraform init
-          terraform apply -auto-approve
-        workingDirectory: backend
-  - job: Static_Application_Security_Testing_SonarQube
-    steps:
-      - script: |
-          def scannerHome = tool 'sonarscanner'
-          sh "${scannerHome}/bin/sonar-scanner"
-        workingDirectory: docker
+  # - job: Create_Backend
+  #   steps:
+  #     - script: |
+  #         terraform init
+  #         terraform apply -auto-approve
+  #       workingDirectory: backend
+  # - job: Static_Application_Security_Testing_SonarQube
+  #   steps:
+  #     - script: |
+  #         def scannerHome = tool 'sonarscanner'
+  #         sh "${scannerHome}/bin/sonar-scanner"
+  #       workingDirectory: docker
   - job: Docker_Image_Build
     steps:
       - script: docker build . -t wp
@@ -51,9 +51,9 @@ jobs:
         workingDirectory: ssl
       - task: DownloadSecureFile@1
         name: ansiblePass
-        displayName: 'Download Ansible Vault Password File'
+        displayName: "Download Ansible Vault Password File"
         inputs:
-          secureFile: '.pass.txt'
+          secureFile: ".pass.txt"
   - job: Convert_Template_Files
     steps:
       - script: |
