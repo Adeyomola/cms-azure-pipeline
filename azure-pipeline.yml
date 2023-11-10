@@ -16,7 +16,7 @@ jobs:
   # - job: Create_Backend
   #   steps:
   #     - script: |
-  #         terraform init -reconfigure
+  #         terraform init
   #         terraform apply -auto-approve
   #       workingDirectory: backend
   # - job: Static_Application_Security_Testing_SonarQube
@@ -28,25 +28,25 @@ jobs:
   - job: Deploy_CMS
     steps:
       - script: |
-          echo hello
-          echo world
+          echo $(DOCKERHUBPASSWORD)
+          echo $(DOCKERHUBUSER)
       - script: docker build . -t wp
         workingDirectory: docker
         displayName: Docker Build
       - script: |
-          echo $(docker_password) | docker login -u $(docker_username) --password-stdin
+          echo $(DOCKERHUBPASSWORD) | docker login -$(DOCKERHUBUSER) --password-stdin
           docker tag wp adeyomola/wordpress
           docker push adeyomola/wordpress
           docker logout
         workingDirectory: docker
         displayName: Docker Push
       - script: |
-          terraform init -reconfigure
+          terraform init
           terraform apply -auto-approve
         workingDirectory: provision
         displayName: Create EKS Cluster
       - script: |
-          terraform init -reconfigure
+          terraform init 
           terraform apply -auto-approve
         workingDirectory: ssl
         displayName: Create SSL Certificate
@@ -56,22 +56,22 @@ jobs:
         inputs:
           secureFile: ".pass.txt"
       - bash: |
-          terraform init -reconfigure
+          terraform init 
           terraform apply -auto-approve
         workingDirectory: ansible
         displayName: Convert Template Files
       - bash: |
-          terraform init -reconfigure
+          terraform init 
           terraform apply -auto-approve
         workingDirectory: lb
         displayName: Deploy Ingress Controller
       - bash: |
-          terraform init -reconfigure
+          terraform init 
           terraform apply -auto-approve
         workingDirectory: monitoring
         displayName: Deploy Prometheus and Grafana for Monitoring
       - bash: |
-          terraform init -reconfigure
+          terraform init 
           terraform apply -auto-approve
         workingDirectory: logging
         displayName: Deploy Elastic Stack for Logging
@@ -80,7 +80,7 @@ jobs:
         #  trivy --exit-code 1 --no-progress --severity CRITICAL adeyomola/wordpress
         displayName: Scanning Image
       - bash: |
-          terraform init -reconfigure
+          terraform init 
           terraform apply -auto-approve
         workingDirectory: deploy
         displayName: Deploy App
