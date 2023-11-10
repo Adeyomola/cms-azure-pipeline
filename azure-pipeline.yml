@@ -16,7 +16,7 @@ jobs:
   # - job: Create_Backend
   #   steps:
   #     - script: |
-  #         terraform init
+  #         terraform init -reconfigure
   #         terraform apply -auto-approve
   #       workingDirectory: backend
   # - job: Static_Application_Security_Testing_SonarQube
@@ -45,12 +45,12 @@ jobs:
         workingDirectory: docker
         displayName: Docker Push
       - script: |
-          terraform init
+          terraform init -reconfigure
           terraform apply -auto-approve
         workingDirectory: provision
         displayName: Create EKS Cluster
       - script: |
-          terraform init
+          terraform init -reconfigure
           terraform apply -auto-approve
         workingDirectory: ssl
         displayName: Create SSL Certificate
@@ -60,22 +60,22 @@ jobs:
         inputs:
           secureFile: ".pass.txt"
       - script: |
-          terraform init
+          terraform init -reconfigure
           terraform apply -auto-approve
         workingDirectory: ansible
         displayName: Convert Template Files
       - script: |
-          terraform init
+          terraform init -reconfigure
           terraform apply -auto-approve
         workingDirectory: lb
         displayName: Deploy Ingress Controller
       - script: |
-          terraform init
+          terraform init -reconfigure
           terraform apply -auto-approve
         workingDirectory: monitoring
         displayName: Deploy Prometheus and Grafana for Monitoring
       - script: |
-          terraform init
+          terraform init -reconfigure
           terraform apply -auto-approve
         workingDirectory: logging
         displayName: Deploy Elastic Stack for Logging
@@ -84,7 +84,7 @@ jobs:
         #  trivy --exit-code 1 --no-progress --severity CRITICAL adeyomola/wordpress
         displayName: Scanning Image
       - script: |
-          terraform init
+          terraform init -reconfigure
           terraform apply -auto-approve
         workingDirectory: deploy
         displayName: Deploy App
