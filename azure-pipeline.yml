@@ -49,6 +49,11 @@ jobs:
           terraform init
           terraform apply -auto-approve
         workingDirectory: ssl
+      - task: DownloadSecureFile@1
+        name: ansiblePass
+        displayName: 'Download Ansible Vault Password File'
+        inputs:
+          secureFile: '.pass.txt'
   - job: Convert_Template_Files
     steps:
       - script: |
