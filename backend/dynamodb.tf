@@ -9,6 +9,21 @@ resource "aws_dynamodb_table" "state_locking" {
   }
 }
 
+data "aws_iam_policy_document" "ddb_role" {
+  statement {
+    principals {
+      type        = "Service"
+      identifiers = [aws_dynamodb_table.state_locking.id]
+    }
+    effect = "Allow"
+  }
+}
+
+resource "aws_iam_role" "ddb_role" {
+  name        = "Dynamodb_Role"
+  assume_role_policy = data.aws_iam_policy_document.ddb_role.json
+}
+
 data "aws_iam_policy_document" "ddb_policy" {
   statement {
     actions = [
@@ -21,14 +36,15 @@ data "aws_iam_policy_document" "ddb_policy" {
     resources = [
 "arn:aws:dynamodb:*:*:table/${var.table_name}",
     ]
-    principals {
-      type        = "AWS"
-      identifiers = [var.arn]
-    }
   }
 }
 
-resource "aws_iam_role" "ddb_role" {
-  name        = "Dynamodb_Role"
-  assume_role_policy = data.aws_iam_policy_document.ddb_policy.json
+resource "aws_iam_policy" "ddb_policy" {
+  name        = "DDB-policy"
+  policy      = data.aws_iam_policy_document.ddb_policy.json
+}
+
+resource "aws_iam_role_policy_attachment" "attach" {
+  role       = aws_iam_role.ddb_role.name
+  policy_arn = aws_iam_policy.ddb_policy.arn
 }
