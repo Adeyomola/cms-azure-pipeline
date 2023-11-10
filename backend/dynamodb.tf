@@ -22,8 +22,8 @@ data "aws_iam_policy_document" "ddb_policy" {
 "arn:aws:dynamodb:*:*:table/${var.table_name}",
     ]
     principals {
-      type        = "Service"
-      identifiers = [aws_dynamodb_table.state_locking.id]
+      type        = "AWS"
+      identifiers = [var.arn]
     }
   }
 }
