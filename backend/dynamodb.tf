@@ -12,8 +12,8 @@ resource "aws_dynamodb_table" "state_locking" {
 data "aws_iam_policy_document" "ddb_role" {
   statement {
     principals {
-      type        = "Service"
-      identifiers = [aws_dynamodb_table.state_locking.id]
+      type        = "AWS"
+      identifiers = [var.arn]
     }
     effect = "Allow"
     actions = ["sts:AssumeRole"]
