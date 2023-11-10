@@ -1,0 +1,52 @@
+variables:
+  AWS_ACCESS_KEY_ID: $(access_key_id)
+  AWS_SECRET_ACCESS_KEY: $(secret_access_key)
+  AWS_DEFAULT_REGION: $(REGION)
+  ANSIBLE_VAULT_PASSWORD_FILE:
+  TF_VAR_db_user: $(USERNAME)
+  TF_VAR_db_password: $(USERNAME)
+  TF_VAR_db_name: $(DB_NAME)
+  TF_VAR_db_port: 3306
+  TF_VAR_arn: $(ARN)
+  TF_VAR_email: $(email)
+  TF_VAR_account_id: $(account_id)
+  dockerhubPassword: $(docker_password)
+  dockerhubUser: $(docker_username)
+jobs:
+  - job: Destroy_CMS
+    steps:
+      - script: |
+          terraform init
+          terraform destroy -auto-approve
+        workingDirectory: deploy
+        displayName: Deploy App
+
+      - script: |
+          terraform init
+          terraform destroy -auto-approve
+        workingDirectory: logging
+        displayName: Destroy Logging
+
+      - script: |
+          terraform init
+          terraform destroy -auto-approve
+        workingDirectory: monitoring
+        displayName: Destroy Monitoring
+
+      - script: |
+          terraform init
+          terraform destroy -auto-approve
+        workingDirectory: lb
+        displayName: Destroy Ingress Controller
+
+      - script: |
+          terraform init
+          terraform destroy -auto-approve
+        workingDirectory: ssl
+        displayName: Destroy SSL Certificate
+
+      - script: |
+          terraform init
+          terraform destroy -auto-approve
+        workingDirectory: provision
+        displayName: Destroy EKS Cluster
