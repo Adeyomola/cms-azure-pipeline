@@ -17,8 +17,10 @@ data "aws_iam_policy_document" "ddb_policy" {
         "dynamodb:PutItem",
         "dynamodb:DeleteItem"
       ]
-    Effect = "Allow"
-    Resource = "arn:aws:dynamodb:*:*:table/${var.table_name}"
+    effect = "Allow"
+    resources = [
+"arn:aws:dynamodb:*:*:table/${var.table_name}",
+    ]
     principals {
       type        = "Service"
       identifiers = [aws_dynamodb_table.state_locking.id]
