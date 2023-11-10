@@ -16,6 +16,7 @@ data "aws_iam_policy_document" "ddb_role" {
       identifiers = [aws_dynamodb_table.state_locking.id]
     }
     effect = "Allow"
+    actions = ["sts:AssumeRole"]
   }
 }
 
