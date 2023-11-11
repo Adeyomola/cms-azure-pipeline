@@ -18,48 +18,29 @@ spec:
       labels:
         app: db
     spec:
-#      volumes:
-#      - name: mysql-persistent-storage
-#        persistentVolumeClaim:
-#          claimName: mysql-pv-claim
       containers:
-      - name: db
-        image: mariadb:lts-jammy
-        ports:
-        - containerPort: ${db_port}
-        resources:
+        - name: db
+          image: mariadb:lts-jammy
+          ports:
+            - containerPort: ${db_port}
+          resources:
             limits:
               memory: 512Mi
             requests:
               memory: 256Mi
-        env:
-        - name: MYSQL_USER
-          value: adeyomola
-#          valueFrom:
-#            secretKeyRef:
-#              name: db-secret
-#              key: db-user
-        - name: MYSQL_ROOT_PASSWORD
-          value: rootpassword
-#          valueFrom:
-#            secretKeyRef:
-#              name: db-secret
-#              key: db-password
-        - name: MYSQL_PASSWORD
-          value: userpassword
-#          valueFrom:
-#            secretKeyRef:
-#              name: db-secret
-#              key: db-password
-        - name: MYSQL_DATABASE
-          value: "${db_name}"
-#        volumeMounts:
-#        - name: mysql-persistent-storage
-#          mountPath: /var/lib/mysql
-      - name: phpmyadmin
-        image: bitnami/phpmyadmin:latest
-        ports:
-        - containerPort: 8080
-        env:
-        - name: DATABASE_HOST
-          value: db-service
+          env:
+            - name: MYSQL_USER
+              value: adeyomola
+            - name: MYSQL_ROOT_PASSWORD
+              value: "${db_user}"
+            - name: MYSQL_PASSWORD
+              value: "${db_password}"
+            - name: MYSQL_DATABASE
+              value: "${db_name}"
+        - name: phpmyadmin
+          image: bitnami/phpmyadmin:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DATABASE_HOST
+              value: db-service

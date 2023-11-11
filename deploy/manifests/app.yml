@@ -15,32 +15,17 @@ spec:
       labels:
         app: app
     spec:
-#      volumes:
-#      - name: wordpress-persistent-storage
-#        persistentVolumeClaim:
-#          claimName: wp-pv-claim
       containers:
-      - name: app
-        image: adeyomola/wordpress
-        ports:
-        - containerPort: 80
-#        volumeMounts:
-#        - name: wordpress-persistent-storage
-#          mountPath: /var/www/html
-        env:
-        - name: DB_USER
-          value: adeyomola
-#          valueFrom:
-#            secretKeyRef:
-#              name: db-secret
-#              key: db-user
-        - name: DB_PASSWORD
-          value: userpassword
-#          valueFrom:
-#            secretKeyRef:
-#              name: db-secret
-#              key: db-password
-        - name: DB_HOST
-          value: db-service.cms.svc.cluster.local
-        - name: DB_NAME
-          value: "${db_name}"
+        - name: app
+          image: adeyomola/wordpress
+          ports:
+            - containerPort: 80
+          env:
+            - name: DB_USER
+              value: "${db_user}"
+            - name: DB_PASSWORD
+              value: "${db_password}"
+            - name: DB_HOST
+              value: db-service.cms.svc.cluster.local
+            - name: DB_NAME
+              value: "${db_name}"
