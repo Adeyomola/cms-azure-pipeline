@@ -21,8 +21,8 @@ jobs:
         inputs:
           targetType: "inline"
           script: |
-            echo $(DOCKERHUBPASSWORD)
-            echo $(DOCKERHUBUSER)
+            echo $(dockerhubPassword)
+            echo $(dockerhubUser)
         env:
           AWS_ACCESS_KEY_ID: $(access_key_id)
           AWS_SECRET_ACCESS_KEY: $(secret_access_key)
@@ -44,7 +44,7 @@ jobs:
         inputs:
           targetType: "inline"
           script: |
-            echo $(DOCKERHUBPASSWORD) | docker login $(DOCKERHUBUSER) --password-stdin
+            echo $(dockerhubPassword) | docker login $(dockerhubUser) --password-stdin
             docker tag wp adeyomola/wordpress
             docker push adeyomola/wordpress
             docker logout
