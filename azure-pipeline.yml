@@ -17,7 +17,7 @@ jobs:
   #       workingDirectory: docker
   - job: Deploy_CMS
     steps:
-      - task: PowerShell@2
+      - task: Bash@3
         inputs:
           targetType: "inline"
           script: |
@@ -40,7 +40,16 @@ jobs:
       - bash: docker build . -t wp
         workingDirectory: docker
         displayName: Docker Build
-      - bash: |
+      - task: Bash@3
+        inputs:
+          targetType: "inline"
+          script: |
+            echo $env:DOCKERHUBPASSWORD
+            echo $env:DOCKERHUBUSER
+        env:
+          dockerhubPassword: $(docker_password)
+          dockerhubUser: $(docker_username)
+      - script: |
           echo $(DOCKERHUBPASSWORD) | docker login $(DOCKERHUBUSER) --password-stdin
           docker tag wp adeyomola/wordpress
           docker push adeyomola/wordpress
