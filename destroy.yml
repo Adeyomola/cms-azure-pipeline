@@ -5,6 +5,12 @@ jobs:
       Destroy
       # Destroy App
     steps:
+      - bash: |
+          export ANSIBLE_VAULT_PASSWORD_FILE=$(ansiblePass.secureFilePath)
+          terraform init
+          terraform apply -auto-approve
+        displayName: Convert Template Files
+        workingDirectory: ansible
       - task: Bash@3
         inputs:
           targetType: inline
