@@ -25,7 +25,6 @@ jobs:
         inputs:
           targetType: inline
           script: |
-            script: echo $(ansiblePass.secureFilePath)
             echo "$dockerhubPassword" | docker login --username $dockerhubUser --password-stdin
             docker tag wp adeyomola/wordpress
             docker push adeyomola/wordpress
@@ -68,75 +67,75 @@ jobs:
         displayName: "Download Ansible Vault Password File"
         inputs:
           secureFile: ".pass.txt"
-      # # Convert Template Files
-      # - task: Bash@3
-      #   displayName: Convert Template Files
-      #   inputs:
-      #     script: |
-      #       env
-      #       terraform init
-      #       terraform apply -auto-approve
-      #     workingDirectory: ansible
-      #   env:
-      #     ANSIBLE_VAULT_PASSWORD_FILE: $(ansiblePass.secureFilePath)
-      # # Deploy Ingress Controller
-      # - task: Bash@3
-      #   displayName: Deploy Ingress Controller
-      #   inputs:
-      #     targetType: inline
-      #     script: |
-      #       terraform init
-      #       terraform apply -auto-approve
-      #     workingDirectory: alb
-      #   env:
-      #     AWS_ACCESS_KEY_ID: $(access_key_id)
-      #     AWS_SECRET_ACCESS_KEY: $(secret_access_key)
-      #     AWS_DEFAULT_REGION: $(REGION)
-      #     TF_VAR_account_id: $(account_id)
-      # # Deploy Monitoring
-      # - task: Bash@3
-      #   displayName: Deploy Prometheus and Grafana for Monitoring
-      #   inputs:
-      #     targetType: inline
-      #     script: |
-      #       terraform init
-      #       terraform apply -auto-approve
-      #     workingDirectory: monitoring
-      #   env:
-      #     AWS_ACCESS_KEY_ID: $(access_key_id)
-      #     AWS_SECRET_ACCESS_KEY: $(secret_access_key)
-      #     AWS_DEFAULT_REGION: $(REGION)
-      # # Deploy Logging
-      # - task: Bash@3
-      #   displayName: Deploy Elastic Stack for Logging
-      #   inputs:
-      #     targetType: inline
-      #     script: |
-      #       terraform init
-      #       terraform apply -auto-approve
-      #     workingDirectory: logging
-      #   env:
-      #     AWS_ACCESS_KEY_ID: $(access_key_id)
-      #     AWS_SECRET_ACCESS_KEY: $(secret_access_key)
-      #     AWS_DEFAULT_REGION: $(REGION)
-      # - bash: |
-      #     trivy image adeyomola/wordpress
-      #   #  trivy --exit-code 1 --no-progress --severity CRITICAL adeyomola/wordpress
-      #   displayName: Scanning Image
-      # # Deploy App
-      # - task: Bash@3
-      #   displayName: Deploy App
-      #   inputs:
-      #     targetType: inline
-      #     script: |
-      #       terraform init
-      #       terraform apply -auto-approve
-      #     workingDirectory: deploy
-      #   env:
-      #     AWS_ACCESS_KEY_ID: $(access_key_id)
-      #     AWS_SECRET_ACCESS_KEY: $(secret_access_key)
-      #     AWS_DEFAULT_REGION: $(REGION)
-      #     TF_VAR_db_user: $(USERNAME)
-      #     TF_VAR_db_password: $(USERNAME)
-      #     TF_VAR_db_name: $(DB_NAME)
-      #     TF_VAR_db_port: 3306
+      # Convert Template Files
+      - task: Bash@3
+        displayName: Convert Template Files
+        inputs:
+          script: |
+            env
+            terraform init
+            terraform apply -auto-approve
+          workingDirectory: ansible
+        env:
+          ANSIBLE_VAULT_PASSWORD_FILE: $(ansiblePass.secureFilePath)
+      # Deploy Ingress Controller
+      - task: Bash@3
+        displayName: Deploy Ingress Controller
+        inputs:
+          targetType: inline
+          script: |
+            terraform init
+            terraform apply -auto-approve
+          workingDirectory: alb
+        env:
+          AWS_ACCESS_KEY_ID: $(access_key_id)
+          AWS_SECRET_ACCESS_KEY: $(secret_access_key)
+          AWS_DEFAULT_REGION: $(REGION)
+          TF_VAR_account_id: $(account_id)
+      # Deploy Monitoring
+      - task: Bash@3
+        displayName: Deploy Prometheus and Grafana for Monitoring
+        inputs:
+          targetType: inline
+          script: |
+            terraform init
+            terraform apply -auto-approve
+          workingDirectory: monitoring
+        env:
+          AWS_ACCESS_KEY_ID: $(access_key_id)
+          AWS_SECRET_ACCESS_KEY: $(secret_access_key)
+          AWS_DEFAULT_REGION: $(REGION)
+      # Deploy Logging
+      - task: Bash@3
+        displayName: Deploy Elastic Stack for Logging
+        inputs:
+          targetType: inline
+          script: |
+            terraform init
+            terraform apply -auto-approve
+          workingDirectory: logging
+        env:
+          AWS_ACCESS_KEY_ID: $(access_key_id)
+          AWS_SECRET_ACCESS_KEY: $(secret_access_key)
+          AWS_DEFAULT_REGION: $(REGION)
+      - bash: |
+          trivy image adeyomola/wordpress
+        #  trivy --exit-code 1 --no-progress --severity CRITICAL adeyomola/wordpress
+        displayName: Scanning Image
+      # Deploy App
+      - task: Bash@3
+        displayName: Deploy App
+        inputs:
+          targetType: inline
+          script: |
+            terraform init
+            terraform apply -auto-approve
+          workingDirectory: deploy
+        env:
+          AWS_ACCESS_KEY_ID: $(access_key_id)
+          AWS_SECRET_ACCESS_KEY: $(secret_access_key)
+          AWS_DEFAULT_REGION: $(REGION)
+          TF_VAR_db_user: $(USERNAME)
+          TF_VAR_db_password: $(USERNAME)
+          TF_VAR_db_name: $(DB_NAME)
+          TF_VAR_db_port: 3306
