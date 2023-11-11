@@ -5,6 +5,11 @@ jobs:
       Destroy
       # Destroy App
     steps:
+      - task: DownloadSecureFile@1
+        name: ansiblePass
+        displayName: "Download Ansible Vault Password File"
+        inputs:
+          secureFile: ".pass.txt"
       - bash: |
           export ANSIBLE_VAULT_PASSWORD_FILE=$(ansiblePass.secureFilePath)
           terraform init
