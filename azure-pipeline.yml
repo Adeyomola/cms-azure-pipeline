@@ -74,16 +74,6 @@ jobs:
           terraform apply -auto-approve
         displayName: Convert Template Files
         workingDirectory: ansible
-      # - task: Bash@3
-      #   displayName: Convert Template Files
-      #   inputs:
-      #     script: |
-      #       env
-      #       terraform init
-      #       terraform apply -auto-approve
-      #     workingDirectory: ansible
-      #   env:
-      #     ANSIBLE_VAULT_PASSWORD_FILE: $ansiblePass.secureFilePath
       # Deploy Ingress Controller
       - task: Bash@3
         displayName: Deploy Ingress Controller
@@ -124,10 +114,13 @@ jobs:
           AWS_ACCESS_KEY_ID: $(access_key_id)
           AWS_SECRET_ACCESS_KEY: $(secret_access_key)
           AWS_DEFAULT_REGION: $(REGION)
-      - bash: |
-          trivy image adeyomola/wordpress
-        #  trivy --exit-code 1 --no-progress --severity CRITICAL adeyomola/wordpress
+        # Scanning Image
+      - task: trivy@1
         displayName: Scanning Image
+        inputs:
+          image: adeyomola/wordpress
+          severities: CRITICAL
+          exitCode: 0
       # Deploy App
       - task: Bash@3
         displayName: Deploy App
