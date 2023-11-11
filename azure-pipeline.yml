@@ -48,10 +48,10 @@ jobs:
             docker tag wp adeyomola/wordpress
             docker push adeyomola/wordpress
             docker logout
+          workingDirectory: docker
         env:
           dockerhubPassword: $(docker_password)
           dockerhubUser: $(docker_username)
-        workingDirectory: docker
         displayName: Docker Push
       - script: |
           terraform init
