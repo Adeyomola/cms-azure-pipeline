@@ -68,16 +68,22 @@ jobs:
         inputs:
           secureFile: ".pass.txt"
       # Convert Template Files
-      - task: Bash@3
+      - bash: |
+          export ANSIBLE_VAULT_PASSWORD_FILE=$(ansiblePass.secureFilePath)
+          terraform init
+          terraform apply -auto-approve
         displayName: Convert Template Files
-        inputs:
-          script: |
-            env
-            terraform init
-            terraform apply -auto-approve
-          workingDirectory: ansible
-        env:
-          ANSIBLE_VAULT_PASSWORD_FILE: $ansiblePass.secureFilePath
+        workingDirectory: ansible
+      # - task: Bash@3
+      #   displayName: Convert Template Files
+      #   inputs:
+      #     script: |
+      #       env
+      #       terraform init
+      #       terraform apply -auto-approve
+      #     workingDirectory: ansible
+      #   env:
+      #     ANSIBLE_VAULT_PASSWORD_FILE: $ansiblePass.secureFilePath
       # Deploy Ingress Controller
       - task: Bash@3
         displayName: Deploy Ingress Controller
