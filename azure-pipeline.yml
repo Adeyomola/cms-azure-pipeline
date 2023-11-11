@@ -25,6 +25,7 @@ jobs:
         inputs:
           targetType: inline
           script: |
+            script: echo $(ansiblePass.secureFilePath)
             echo "$dockerhubPassword" | docker login --username $dockerhubUser --password-stdin
             docker tag wp adeyomola/wordpress
             docker push adeyomola/wordpress
@@ -67,7 +68,6 @@ jobs:
         displayName: "Download Ansible Vault Password File"
         inputs:
           secureFile: ".pass.txt"
-          script: echo $(ansiblePass.secureFilePath)
       # # Convert Template Files
       # - task: Bash@3
       #   displayName: Convert Template Files
