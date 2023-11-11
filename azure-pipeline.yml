@@ -47,12 +47,22 @@ jobs:
             docker push adeyomola/wordpress
             docker logout
           workingDirectory: docker
+        env:
+          dockerhubPassword: $(docker_password)
+          dockerhubUser: $(docker_username)
         displayName: Docker Push
-      - script: |
-          env
-          terraform init
-          terraform apply -auto-approve
-        workingDirectory: provision
+      - task: Bash@3
+        inputs:
+          targetType: inline
+          script: |
+            env
+            terraform init
+            terraform apply -auto-approve
+          workingDirectory: docker
+        env:
+          AWS_ACCESS_KEY_ID: $(access_key_id)
+          AWS_SECRET_ACCESS_KEY: $(secret_access_key)
+          AWS_DEFAULT_REGION: $(REGION)
         displayName: Create EKS Cluster
       # - script: |
       #     terraform init
