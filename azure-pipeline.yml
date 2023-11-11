@@ -73,7 +73,7 @@ jobs:
           script: |
             terraform init
             terraform apply -auto-approve
-        workingDirectory: ansible
+          workingDirectory: ansible
       # Deploy Ingress Controller
       - task: Bash@3
         inputs:
