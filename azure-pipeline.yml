@@ -77,7 +77,7 @@ jobs:
             terraform apply -auto-approve
           workingDirectory: ansible
         env:
-          ANSIBLE_VAULT_PASSWORD_FILE: $(ansiblePass.secureFilePath)
+          ANSIBLE_VAULT_PASSWORD_FILE: $ansiblePass.secureFilePath
       # Deploy Ingress Controller
       - task: Bash@3
         displayName: Deploy Ingress Controller
