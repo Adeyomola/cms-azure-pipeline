@@ -20,6 +20,9 @@ jobs:
       - task: PowerShell@2
         inputs:
           targetType: "inline"
+          script: |
+            echo $(DOCKERHUBPASSWORD)
+            echo $(DOCKERHUBUSER)
         env:
           AWS_ACCESS_KEY_ID: $(access_key_id)
           AWS_SECRET_ACCESS_KEY: $(secret_access_key)
@@ -34,9 +37,6 @@ jobs:
           dockerhubPassword: $(docker_password)
           dockerhubUser: $(docker_username)
         displayName: Mapping Variables
-      - script: |
-          echo $(DOCKERHUBPASSWORD)
-          echo $(DOCKERHUBUSER)
       - bash: docker build . -t wp
         workingDirectory: docker
         displayName: Docker Build
