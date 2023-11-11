@@ -1,5 +1,7 @@
 variables:
   - group: cms
+trigger:
+  batch: true
 jobs:
   # - job: Create_Backend
   #   steps:
