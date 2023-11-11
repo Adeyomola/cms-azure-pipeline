@@ -20,9 +20,6 @@ jobs:
       - task: Bash@3
         inputs:
           targetType: "inline"
-          script: |
-            echo $dockerhubPassword
-            echo $dockerhubUser
         env:
           AWS_ACCESS_KEY_ID: $(access_key_id)
           AWS_SECRET_ACCESS_KEY: $(secret_access_key)
@@ -36,23 +33,18 @@ jobs:
           TF_VAR_account_id: $(account_id)
           dockerhubPassword: $(docker_password)
           dockerhubUser: $(docker_username)
-        displayName: Mapping Variables
+        displayName: Mapping Secret Variables
       - bash: docker build . -t wp
         workingDirectory: docker
         displayName: Docker Build
-      - task: Bash@3
-        inputs:
-          targetType: "inline"
-          script: |
-            echo $dockerhubPassword | docker login $dockerhubUser --password-stdin
-            docker tag wp adeyomola/wordpress
-            docker push adeyomola/wordpress
-            docker logout
-          workingDirectory: docker
-        env:
-          dockerhubPassword: $(docker_password)
-          dockerhubUser: $(docker_username)
+      - script: |
+          echo $dockerhubPassword | docker login --username $dockerhubUser --password-stdin
+          docker tag wp adeyomola/wordpress
+          docker push adeyomola/wordpress
+          docker logout
+        workingDirectory: docker
         displayName: Docker Push
+
       - script: |
           terraform init
           terraform apply -auto-approve
