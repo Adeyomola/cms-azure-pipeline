@@ -1,6 +1,7 @@
 variables:
   - group: cms
-  - TF_VAR_db_port: 3306
+  - name: TF_VAR_db_port
+    value: 3306
 jobs:
   # - job: Create_Backend
   #   steps:
