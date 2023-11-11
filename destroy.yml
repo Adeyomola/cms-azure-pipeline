@@ -1,52 +1,93 @@
 variables:
-  AWS_ACCESS_KEY_ID: $(access_key_id)
-  AWS_SECRET_ACCESS_KEY: $(secret_access_key)
-  AWS_DEFAULT_REGION: $(REGION)
-  ANSIBLE_VAULT_PASSWORD_FILE:
-  TF_VAR_db_user: $(USERNAME)
-  TF_VAR_db_password: $(USERNAME)
-  TF_VAR_db_name: $(DB_NAME)
-  TF_VAR_db_port: 3306
-  TF_VAR_arn: $(ARN)
-  TF_VAR_email: $(email)
-  TF_VAR_account_id: $(account_id)
-  dockerhubPassword: $(docker_password)
-  dockerhubUser: $(docker_username)
+  - group: cms
+  - name: TF_VAR_db_port
+    value: 3306
+  - name: ANSIBLE_VAULT_PASSWORD_FILE
+    value: /home/vsts/work/_temp/.pass.txt
 jobs:
-  - job: Destroy_CMS
+  - job:
+      Destroy
+      # Destroy App
     steps:
-      - script: |
-          terraform init
-          terraform destroy -auto-approve
-        workingDirectory: deploy
-        displayName: Deploy App
-
-      - script: |
-          terraform init
-          terraform destroy -auto-approve
-        workingDirectory: logging
-        displayName: Destroy Logging
-
-      - script: |
-          terraform init
-          terraform destroy -auto-approve
-        workingDirectory: monitoring
-        displayName: Destroy Monitoring
-
-      - script: |
-          terraform init
-          terraform destroy -auto-approve
-        workingDirectory: alb
+      - task: Bash@3
+        inputs:
+          targetType: inline
+          script: |
+            terraform init
+            terraform destroy -auto-approve
+          workingDirectory: deploy
+        env:
+          AWS_ACCESS_KEY_ID: $(access_key_id)
+          AWS_SECRET_ACCESS_KEY: $(secret_access_key)
+          AWS_DEFAULT_REGION: $(REGION)
+          TF_VAR_db_user: $(USERNAME)
+          TF_VAR_db_password: $(USERNAME)
+          TF_VAR_db_name: $(DB_NAME)
+        displayName: Destroy App
+      # Destroy Logging
+      - task: Bash@3
+        inputs:
+          targetType: inline
+          script: |
+            terraform init
+            terraform destroy -auto-approve
+          workingDirectory: logging
+        env:
+          AWS_ACCESS_KEY_ID: $(access_key_id)
+          AWS_SECRET_ACCESS_KEY: $(secret_access_key)
+          AWS_DEFAULT_REGION: $(REGION)
+        displayName: Destroy Elastic
+      # Destroy Monitoring
+      - task: Bash@3
+        inputs:
+          targetType: inline
+          script: |
+            terraform init
+            terraform destroy -auto-approve
+          workingDirectory: monitoring
+        env:
+          AWS_ACCESS_KEY_ID: $(access_key_id)
+          AWS_SECRET_ACCESS_KEY: $(secret_access_key)
+          AWS_DEFAULT_REGION: $(REGION)
+        displayName: Destroy Prometheus and Grafana
+      # Destroy Ingress Controller
+      - task: Bash@3
+        inputs:
+          targetType: inline
+          script: |
+            terraform init
+            terraform destroy -auto-approve
+          workingDirectory: alb
+        env:
+          AWS_ACCESS_KEY_ID: $(access_key_id)
+          AWS_SECRET_ACCESS_KEY: $(secret_access_key)
+          AWS_DEFAULT_REGION: $(REGION)
+          TF_VAR_account_id: $(account_id)
         displayName: Destroy Ingress Controller
-
-      - script: |
-          terraform init
-          terraform destroy -auto-approve
-        workingDirectory: ssl
+        # Destroy SSL Certificate
+      - task: Bash@3
+        inputs:
+          targetType: inline
+          script: |
+            terraform init
+            terraform destroy -auto-approve
+          workingDirectory: ssl
+        env:
+          AWS_ACCESS_KEY_ID: $(access_key_id)
+          AWS_SECRET_ACCESS_KEY: $(secret_access_key)
+          AWS_DEFAULT_REGION: $(REGION)
+          TF_VAR_email: $(email)
         displayName: Destroy SSL Certificate
-
-      - script: |
-          terraform init
-          terraform destroy -auto-approve
-        workingDirectory: provision
-        displayName: Destroy EKS Cluster
+        # Destroy EKS Cluster
+      - task: Bash@3
+        inputs:
+          targetType: inline
+          script: |
+            terraform init
+            terraform destroy -auto-approve
+          workingDirectory: provision
+        env:
+          AWS_ACCESS_KEY_ID: $(access_key_id)
+          AWS_SECRET_ACCESS_KEY: $(secret_access_key)
+          AWS_DEFAULT_REGION: $(REGION)
+        displayName: Destroy EKS
