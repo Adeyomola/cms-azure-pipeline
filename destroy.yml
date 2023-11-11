@@ -17,6 +17,7 @@ jobs:
         displayName: Convert Template Files
         workingDirectory: ansible
       - task: Bash@3
+        displayName: Destroy App
         inputs:
           targetType: inline
           script: |
@@ -31,9 +32,10 @@ jobs:
           TF_VAR_db_password: $(USERNAME)
           TF_VAR_db_name: $(DB_NAME)
           TF_VAR_db_port: 3306
-        displayName: Destroy App
       # Destroy Logging
       - task: Bash@3
+        displayName: Destroy Elastic
+        retryCountOnTaskFailure: 1
         inputs:
           targetType: inline
           script: |
@@ -44,9 +46,9 @@ jobs:
           AWS_ACCESS_KEY_ID: $(access_key_id)
           AWS_SECRET_ACCESS_KEY: $(secret_access_key)
           AWS_DEFAULT_REGION: $(REGION)
-        displayName: Destroy Elastic
       # Destroy Monitoring
       - task: Bash@3
+        displayName: Destroy Prometheus and Grafana
         inputs:
           targetType: inline
           script: |
@@ -57,9 +59,9 @@ jobs:
           AWS_ACCESS_KEY_ID: $(access_key_id)
           AWS_SECRET_ACCESS_KEY: $(secret_access_key)
           AWS_DEFAULT_REGION: $(REGION)
-        displayName: Destroy Prometheus and Grafana
       # Destroy Ingress Controller
       - task: Bash@3
+        displayName: Destroy Ingress Controller
         inputs:
           targetType: inline
           script: |
@@ -71,9 +73,9 @@ jobs:
           AWS_SECRET_ACCESS_KEY: $(secret_access_key)
           AWS_DEFAULT_REGION: $(REGION)
           TF_VAR_account_id: $(account_id)
-        displayName: Destroy Ingress Controller
         # Destroy SSL Certificate
       - task: Bash@3
+        displayName: Destroy SSL Certificate
         inputs:
           targetType: inline
           script: |
@@ -85,9 +87,9 @@ jobs:
           AWS_SECRET_ACCESS_KEY: $(secret_access_key)
           AWS_DEFAULT_REGION: $(REGION)
           TF_VAR_email: $(email)
-        displayName: Destroy SSL Certificate
         # Destroy EKS Cluster
       - task: Bash@3
+        displayName: Destroy EKS
         inputs:
           targetType: inline
           script: |
@@ -98,4 +100,3 @@ jobs:
           AWS_ACCESS_KEY_ID: $(access_key_id)
           AWS_SECRET_ACCESS_KEY: $(secret_access_key)
           AWS_DEFAULT_REGION: $(REGION)
-        displayName: Destroy EKS
