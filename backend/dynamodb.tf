@@ -9,6 +9,7 @@ resource "aws_dynamodb_table" "state_locking" {
   }
 }
 
+/*
 data "aws_iam_policy_document" "ddb_role" {
   statement {
     principals {
@@ -49,3 +50,4 @@ resource "aws_iam_role_policy_attachment" "attach" {
   role       = aws_iam_role.ddb_role.name
   policy_arn = aws_iam_policy.ddb_policy.arn
 }
+*/
