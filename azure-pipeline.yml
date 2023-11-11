@@ -17,7 +17,7 @@ jobs:
   #       workingDirectory: docker
   - job: Deploy_CMS
     steps:
-      - task: ImportSecrets@1
+      - task: PowerShell@2
         env:
           AWS_ACCESS_KEY_ID: $(access_key_id)
           AWS_SECRET_ACCESS_KEY: $(secret_access_key)
