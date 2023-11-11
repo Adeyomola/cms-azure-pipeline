@@ -1,9 +1,5 @@
 variables:
   - group: cms
-  - name: TF_VAR_db_port
-    value: 3306
-  - name: ANSIBLE_VAULT_PASSWORD_FILE
-    value: /home/vsts/work/_temp/.pass.txt
 jobs:
   # - job: Create_Backend
   #   steps:
@@ -74,6 +70,8 @@ jobs:
             terraform init
             terraform apply -auto-approve
           workingDirectory: ansible
+        env:
+          ANSIBLE_VAULT_PASSWORD_FILE: /home/vsts/work/_temp/.pass.txt
       # Deploy Ingress Controller
       - task: Bash@3
         inputs:
@@ -133,4 +131,5 @@ jobs:
           TF_VAR_db_user: $(USERNAME)
           TF_VAR_db_password: $(USERNAME)
           TF_VAR_db_name: $(DB_NAME)
+          TF_VAR_db_port: 3306
         displayName: Deploy App

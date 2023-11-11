@@ -1,9 +1,5 @@
 variables:
   - group: cms
-  - name: TF_VAR_db_port
-    value: 3306
-  - name: ANSIBLE_VAULT_PASSWORD_FILE
-    value: /home/vsts/work/_temp/.pass.txt
 jobs:
   - job:
       Destroy
@@ -23,6 +19,7 @@ jobs:
           TF_VAR_db_user: $(USERNAME)
           TF_VAR_db_password: $(USERNAME)
           TF_VAR_db_name: $(DB_NAME)
+          TF_VAR_db_port: 3306
         displayName: Destroy App
       # Destroy Logging
       - task: Bash@3
