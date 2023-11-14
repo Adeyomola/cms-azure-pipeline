@@ -15,7 +15,7 @@ ENV app=/var/www/html/wordpress
 
 # Install wget, git, and other tools.
 RUN ["/bin/bash", "-c", "apt update -y && apt install git wget zlib1g-dev libzip-dev libpng-dev -y \
-&& echo 'ServerName 127.0.0.1' >> /etc/apache2/apache2.conf"]
+&& echo 'ServerName 127.0.0.1' >> /etc/apache2/apache2.conf && chmod +x /usr/local/bin/config_editor.sh"]
 
 # install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql mysqli bcmath zip gd
