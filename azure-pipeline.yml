@@ -15,11 +15,23 @@ jobs:
   #       workingDirectory: docker
   - job: Deploy_CMS
     steps:
+      # Prepare Analysis Configuration task
+      - task: SonarQubePrepare@5
+        inputs:
+          SonarQube: "sonarqube"
+          scannerMode: "CLI"
+          configMode: "file"
       # Build Docker Image From Dockerfile
       - bash: docker build . -t wp
         displayName: Docker Build
         workingDirectory: docker
-        # Push Image to DockerHub
+      # Run Code Analysis task
+      - task: SonarQubeAnalyze@5
+      # Publish Quality Gate Result task
+      - task: SonarQubePublish@5
+        inputs:
+          pollingTimeoutSec: "300"
+      # Push Image to DockerHub
       - task: Bash@3
         displayName: Docker Push
         inputs:
