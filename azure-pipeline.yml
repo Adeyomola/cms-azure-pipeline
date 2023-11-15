@@ -7,12 +7,6 @@ jobs:
   #         terraform init
   #         terraform apply -auto-approve
   #       workingDirectory: backend
-  # - job: Static_Application_Security_Testing_SonarQube
-  #   steps:
-  #     - script: |
-  #         def scannerHome = tool 'sonarscanner'
-  #         sh "${scannerHome}/bin/sonar-scanner"
-  #       workingDirectory: docker
   - job: Deploy_CMS
     steps:
       # Prepare Analysis Configuration task
