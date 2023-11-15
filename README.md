@@ -22,6 +22,8 @@
 - Then it deploys WordPress.
 
 # Screenshots
+## The Content Management System (WordPress)
+![Screenshot (263)](https://github.com/Adeyomola/cms-azure-pipeline/assets/44479277/66a3339f-df48-4e9b-b5f8-a6dba8ff7a76)
 ## Logging (Elastic Stack)
 ![Overview](./logging/overview.png)
 
@@ -45,7 +47,8 @@
 
 ![](jenkins/Jenkins_1.png)
 ## SonarQube
-![](jenkins/sonarqube.png)
+![Screenshot (264)](https://github.com/Adeyomola/cms-azure-pipeline/assets/44479277/e7c32cd2-15f9-4651-9800-79dac567dbdc)
+![Screenshot (265)](https://github.com/Adeyomola/cms-azure-pipeline/assets/44479277/a52c0b93-3ac1-4511-8f4f-78d33f6f1a60)
 ## Trivy
 ![](jenkins/trivy.png)
 
