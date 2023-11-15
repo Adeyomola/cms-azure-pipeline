@@ -37,7 +37,8 @@
 ![Screenshot (272)](https://github.com/Adeyomola/cms-azure-pipeline/assets/44479277/a62db27c-3625-4e60-9b5f-6f00f330d32e)
 ![Screenshot (274)](https://github.com/Adeyomola/cms-azure-pipeline/assets/44479277/f867d9a1-f405-479a-a7db-fc407d86a693)
 ## Azure DevOps
-
+![Screenshot (279)](https://github.com/Adeyomola/cms-azure-pipeline/assets/44479277/0d2abb56-a6e2-4924-b76e-a0d9535d3ecc)
+![Screenshot (280)](https://github.com/Adeyomola/cms-azure-pipeline/assets/44479277/ea157a9a-bcb8-4827-a727-82b7921cd0ca)
 ## SonarQube
 ![Screenshot (264)](https://github.com/Adeyomola/cms-azure-pipeline/assets/44479277/e7c32cd2-15f9-4651-9800-79dac567dbdc)
 ![Screenshot (265)](https://github.com/Adeyomola/cms-azure-pipeline/assets/44479277/a52c0b93-3ac1-4511-8f4f-78d33f6f1a60)
@@ -67,14 +68,12 @@ Then encrypt the secrets.yml file with ansible vault.
 - Open the `s3.tf` file and comment out `force_destroy = true` in the `aws_s3_bucket` resource block.
 - Then run `terraform init && terraform apply -auto-approve`
 
-## CREATING THE JENKINS SERVER
-
-- After creating Terraform backend, `cd` into the jenkins directory and adjust the `variables.tf`.
-- Then run `terraform init && terraform apply -auto-approve`
+## SET UP A PIPELINE ON YOUR AZURE DEVOPS SERVER
+- Install SonarQube extension and Trivy extension from Visual Studio Marketplace
 
 ## PROVISION AND DEPLOY
 
-### JENKINS CREDENTIALS
+### AZURE DEVOPS VARIABLES
 
 - Create a password file; add your ansible vault password to that file.
 - Then upload the file to a secret file credential with ID: `ANSIBLE_VAULT_PASSWORD_FILE`.
