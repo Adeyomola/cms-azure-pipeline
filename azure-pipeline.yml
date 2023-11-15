@@ -76,7 +76,7 @@ jobs:
         name: ansiblePass
         displayName: "Download Ansible Vault Password File"
         inputs:
-          secureFile: ".pass"
+          secureFile: ".pass.txt"
       # Convert Template Files
       - bash: |
           export ANSIBLE_VAULT_PASSWORD_FILE=$(ansiblePass.secureFilePath)

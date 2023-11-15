@@ -90,7 +90,7 @@ Then encrypt the secrets.yml file with ansible vault.
 
 ### AZURE DEVOPS VARIABLES
 
-- Create a file - `.pass` - containing your ansible vault password.
+- Create a file - `.pass.txt` - containing your ansible vault password.
 - Upload the file to the secure files library of your Azure DevOps project.
 - Create a variable group with the following variable names:
   - access_key_id

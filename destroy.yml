@@ -100,3 +100,16 @@ jobs:
           AWS_ACCESS_KEY_ID: $(access_key_id)
           AWS_SECRET_ACCESS_KEY: $(secret_access_key)
           AWS_DEFAULT_REGION: $(REGION)
+      # Destroy Backend
+      - task: Bash@3
+        displayName: Destroy S3 and DynamoDB
+        inputs:
+          targetType: inline
+          script: |
+            terraform init
+            terraform destroy -auto-approve
+          workingDirectory: backend
+        env:
+          AWS_ACCESS_KEY_ID: $(access_key_id)
+          AWS_SECRET_ACCESS_KEY: $(secret_access_key)
+          AWS_DEFAULT_REGION: $(REGION)
